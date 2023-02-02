@@ -5,9 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "node server/server.js",
     "lint": "next lint",
-    "server": "nodemon server/server.js"
+    "server": "node server/server.js",
+    "nxt": "next start"
   },
   "dependencies": {
     "@next/font": "13.1.6",

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "node server/server.js -p $PORT",
+    "start": "node server/server.js",
     "lint": "next lint",
     "server": "nodemon server/server.js",
     "nxt": "next start"

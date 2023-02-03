@@ -2,6 +2,10 @@ GET http://localhost:3000/users
 
 ###
 
+GET http://localhost:3000/api/comments
+
+###
+
 POST http://localhost:3000/users
 Content-Type: application/json
 

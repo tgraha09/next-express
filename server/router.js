@@ -21,7 +21,10 @@ const posts = [
 
 const users = []
 
-const router = (app) =>{
+const router = (app, handle) =>{
+    app.get('/test', (req, res) => {
+        return handle.render(req, res, '/home')
+    })
     app.get('/posts', (req,res)=>{
         res.json(posts)
     })

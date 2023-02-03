@@ -44,6 +44,7 @@ function Poetry(){
         data[0].lines.map(quote => {
             console.log(quote);
         })*/
+        console.log(data[0]);
         SetQuotes(data[0].lines)
     }
     return (
@@ -51,9 +52,10 @@ function Poetry(){
             <button onClick={fetchQuotes}>Load Quotes</button>
             {
                 
-                quotes.map(quote => {
+               quotes.map((quote, i) => {
+                    
                     return (
-                        <div>
+                        <div key={i}>
                             {quote}
                         </div>
                     )

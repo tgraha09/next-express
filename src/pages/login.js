@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-export default function Signup() {
+export default function Login() {
     return (
       <>
         <Head>
@@ -9,7 +9,8 @@ export default function Signup() {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <h1>Signup</h1>
+        <h1>Login</h1>
+        
       </>
     )
   }

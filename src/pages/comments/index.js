@@ -2,19 +2,14 @@ import { useState } from "react";
 
 function CommentsPage(){
 
-    const [comments, setComments, quotes, SetQuotes] = useState([])
+    const [comments, setComments] = useState([])
 
     const fetchComments = async () =>{
         const response = await fetch('/api/comments')
         const data = await response.json()
         setComments(data)
     }
-    const fetchQuotes = async () =>{
-        const response = await fetch('https://poetrydb.org/title/Ozymandias/lines.json')
-        const data = await response.json()
-        console.log(data);
-        //SetQuotes(data)
-    }
+    
     return (
         <>
             <button onClick={fetchComments}>Load Comments</button>

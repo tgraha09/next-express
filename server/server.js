@@ -1,5 +1,6 @@
 const express = require('express')
 const router = require('./router')
+const bcrypt = require('bcrypt')
 const { createServer } = require('http')
 const { parse } = require('url')
 const bodyParser = require('body-parser')
@@ -9,9 +10,10 @@ const next = require('next')
 const {MongoClient} = require('mongodb')
 const mongoose = require("mongoose")
 const dotenv = require('dotenv')
+const session = require('express-session')
 const User = require('./schemas/userSchema')
 dotenv.config()
-
+const db = require('./db/db')
 const dev = process.env.NODE_ENV !== 'development';
 const port = process.env.PORT || 3000;
 const hostname = 'localhost'
@@ -20,7 +22,7 @@ const uri = process.env.DB_URI //|| "mongodb+srv://tfire09:Facetime217!@cluster0
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 const app = next({ dev })
 const handle = app.getRequestHandler()
-
+let isConnected = false
 
 app.prepare()
 .then(() => {
@@ -29,51 +31,56 @@ app.prepare()
   //server.use(express.static(path.join(__dirname, "js")));
   server.use(bodyParser.json())
   server.use(bodyParser.urlencoded({ extended: true }))
-  //connectMongoose()
-  //connectMongo()
-  //router(server, handle)
- /* server.get('/', (req, res) => {
-    console.log(req.path);
-    
-    ///_next/webpack-hmr
-    return handle(req, res)
-  })
-
+  server.set('trust proxy', 1) // trust first proxy
+  server.use(session({
+    secret: 'Polar express',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true }
+  }))
   
-  server.get('/signup', (req, res) => {
-    console.log(req.path);
-    
-    ///_next/webpack-hmr
-    return handle(req, res)
-  })*/
-server.post('*', async (req, res) => {
-    const user = req.body
-    console.log(user);
-    await addUser(user)
-    //console.log(req.path);
+  server.post('*', async (req, res) => {
+      
+      const path = req.path
+      console.log(path);
+      if(path==='/user/signup'){
+        const user = req.body
+        let result = await db.addUser(user, req, res)
+        //console.log(result.message);
+        req.session.message = result.message
+        if(result.error){
+          //res.statusCode = result.status;
+          return res.status(result.status).send(result.message)//res.send(result.message) //send(result.message) //status(result.status)
+        }
+        //console.log("SUCESS", result.redirect);
+        return res.status(result.status).json(result.redirect) //.json(result.redirect);
+      }
+      else if(path==='/user/login'){
+        const user = req.body
+        let result = await db.loginUser(user, req, res)
+        //console.log(result);
+        req.session.message = result.message
+        if(result.error){
+          //res.statusCode = result.status;
+          return res.status(result.status).send(result.message)//res.send(result.message) //send(result.message) //status(result.status)
+        }
+        //console.log("SUCESS", result.redirect);
+        return res.status(result.status).json(result.redirect) //.json(result.redirect);*/
+      }
 
-   // return handle(req, res)
-   return res.redirect('/login')
-})
- server.get('*', (req, res) => {
-    //const path = req.path
-    //console.log(path);
-    /*if(path == '/'){
-        console.log(path);
-        return handle(req, res)
+  })
+  server.get('*', (req, res) => {
+    if(isConnected==false){
+      db.connectMongoose(uri)
+      isConnected=true
     }
-    else if(path == '/signup'){
-        console.log(path);
-        return handle(req, res)
-    }*/
-    //console.log(req.path);
-
-   return handle(req, res)
+    //let message = req.session.message;
+    return handle(req, res)
   })
 
   server.listen(port, (err) => {
     if (err) throw err
-    console.log('> Ready on http://localhost:3000')
+    console.log(`Ready on http://localhost:${port}`)
   })
 })
 .catch((ex) => {
@@ -81,25 +88,11 @@ server.post('*', async (req, res) => {
   process.exit(1)
 })
 
-async function addUser(_user){
-    
-    mongoose.connect(uri)
 
-    const user = new User({email: _user.email, password: _user.psw})
 
-    await user.save().then(()=> console.log("User Saved!!!!"))
-}
 
-async function connectMongoose(){
-    
-    mongoose.connect(uri)
 
-    const user = new User({email: "test@gmail.com", password: "password"})
-
-    await user.save().then(()=> console.log("User Saved"))
-}
-
-async function connectMongo(){
+/*async function connectMongo(){
 
     const client = new MongoClient(uri);
  
@@ -122,7 +115,7 @@ async function listDatabases(client){
  
     console.log("Databases:");
     databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-};
+};*/
 
 //router(app)
 

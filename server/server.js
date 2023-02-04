@@ -53,7 +53,7 @@ server.post('*', async (req, res) => {
     //console.log(req.path);
 
    // return handle(req, res)
-   //return res.redirect('/login')
+   return res.redirect('/login')
 })
  server.get('*', (req, res) => {
     //const path = req.path

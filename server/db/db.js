@@ -1,8 +1,9 @@
 const mongoose = require("mongoose")
 const bcrypt = require('bcrypt')
 const User = require('../schemas/userSchema')
-let connection
-let currentUser
+var connection
+var currentUser
+
 async function connectMongoose(_uri){
     if(connection==undefined){
         mongoose.connect(_uri, function (err){
@@ -62,8 +63,7 @@ async function loginUser(_user, req, res){
 
         if(bcrypt.compareSync(_user.psw, doc.password)){
             currentUser = doc
-            return {status: 200, redirect:"/", error: false, 
-            message: "Successfully logged in"}
+            //currentUser
         }
     }
     catch(error){
@@ -71,11 +71,14 @@ async function loginUser(_user, req, res){
         return {status: 500,redirect:"/signup", error: true, 
         message: "CATCH: "+ error.message}
     }
-
+    //console.log(currentUser);
+    return {status: 200, redirect:"/", error: false, user: {email:currentUser.email},
+    message: "Successfully logged in"}
 }
 
 module.exports = {
     connectMongoose,
     addUser,
-    loginUser
+    loginUser,
+    currentUser
 }

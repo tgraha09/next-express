@@ -17,15 +17,19 @@ const db = require('./db/db')
 const dev = process.env.NODE_ENV !== 'development';
 const port = process.env.PORT || 3000;
 const hostname = 'localhost'
-const uri = process.env.DB_URI //|| "mongodb+srv://tfire09:Facetime217!@cluster0.qga9p.mongodb.net/test";
+const uri = process.env.DB_URI 
 //app.use(express.json())
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 const app = next({ dev })
 const handle = app.getRequestHandler()
 let isConnected = false
-
+let currentUser
 app.prepare()
 .then(() => {
+  if(isConnected==false){
+    db.connectMongoose(uri)
+    isConnected=true
+  }
   const server = express()
   //server.use(express.static('public'));
   //server.use(express.static(path.join(__dirname, "js")));
@@ -56,9 +60,11 @@ app.prepare()
         return res.status(result.status).json(result.redirect) //.json(result.redirect);
       }
       else if(path==='/user/login'){
+        
         const user = req.body
         let result = await db.loginUser(user, req, res)
         //console.log(result);
+        currentUser = result.user
         req.session.message = result.message
         if(result.error){
           //res.statusCode = result.status;
@@ -69,11 +75,22 @@ app.prepare()
       }
 
   })
+
+  server.get('/current', (req, res) => {
+    console.log(currentUser);
+    //const path = req.path
+    //console.log(db.currentUser);
+    return res.status(200).json(currentUser)
+    //console.log(path);
+    //let message = req.session.message;
+    //return handle(req, res)
+  })
+
   server.get('*', (req, res) => {
-    if(isConnected==false){
-      db.connectMongoose(uri)
-      isConnected=true
-    }
+    
+    const path = req.path
+    
+    //console.log(path);
     //let message = req.session.message;
     return handle(req, res)
   })

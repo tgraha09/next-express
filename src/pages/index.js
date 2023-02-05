@@ -2,11 +2,19 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
-
+import axios from 'axios'
 
 const inter = Inter({ subsets: ['latin'] })
-
+let mounted = false;
 export default function Home() {
+
+  
+  if(mounted== false){
+    console.log("HOME");
+//call get function
+    let data = getUser()
+    mounted = true;
+  }
   return (
     <>
       <Head>
@@ -16,8 +24,36 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1>Index</h1>
+      <h1 id='target'></h1>
     </>
   )
+}
+
+async function getUser(){
+  console.log('getUser');
+  try {
+    let res = await axios({
+      method: 'get',
+      url: '/current',
+      
+    }).then((response)=>{
+      console.log('RESPONSE');
+      console.log(response.data.email);
+      let target = document.getElementById("target")
+      console.log(target);
+      target.innerText = response.data.email
+      return response
+      //window.location.href = response.data
+    })
+    console.log(res);
+    //let data = await res.data;
+    //console.log(data);
+  } catch (error) {
+    //console.log(error.response.data); // this is the main part. Use the response property from the error object
+    
+    
+    return error.response;
+  }
 }
 
 

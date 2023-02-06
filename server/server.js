@@ -12,18 +12,26 @@ const mongoose = require("mongoose")
 const dotenv = require('dotenv')
 const session = require('express-session')
 const User = require('./schemas/userSchema')
+//const cors = require('cors')
 dotenv.config()
 const db = require('./db/db')
 const dev = process.env.NODE_ENV !== 'development';
 const port = process.env.PORT || 3000;
 const hostname = 'localhost'
 const uri = process.env.DB_URI 
+
 //app.use(express.json())
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 const app = next({ dev })
 const handle = app.getRequestHandler()
 let isConnected = false
 let currentUser
+
+/*const corsOptions ={
+  origin:'http://localhost:3000', 
+  credentials:true,            //access-control-allow-credentials:true
+  optionSuccessStatus:200
+}*/
 app.prepare()
 .then(() => {
   if(isConnected==false){
@@ -33,6 +41,8 @@ app.prepare()
   const server = express()
   //server.use(express.static('public'));
   //server.use(express.static(path.join(__dirname, "js")));
+  
+  //server.use(cors(corsOptions))
   server.use(bodyParser.json())
   server.use(bodyParser.urlencoded({ extended: true }))
   server.set('trust proxy', 1) // trust first proxy
@@ -46,7 +56,7 @@ app.prepare()
   server.post('*', async (req, res) => {
       
       const path = req.path
-      console.log(path);
+      //console.log(path);
       if(path==='/user/signup'){
         const user = req.body
         let result = await db.addUser(user, req, res)
@@ -89,7 +99,8 @@ app.prepare()
   server.get('*', (req, res) => {
     
     const path = req.path
-    
+    //res.header("Access-Control-Allow-Origin", "*");
+    //res.header("Access-Control-Allow-Credentials", "false");
     //console.log(path);
     //let message = req.session.message;
     return handle(req, res)

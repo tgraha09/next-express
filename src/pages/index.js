@@ -1,29 +1,46 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
+import React, { useState, useEffect } from 'react'
+//import Head from 'next/head'
+//import Image from 'next/image'
+//import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
 import axios from 'axios'
+import { Product, FooterBanner, HeroBanner} from 'components';
+import { client } from 'lib/client';
 
-const inter = Inter({ subsets: ['latin'] })
+
+//const inter = Inter({ subsets: ['latin'] })
 let mounted = false;
-export default function Home() {
 
+
+export default function Home(){
+//const [token, setToken] = useState(null);
   
   if(mounted== false){
-    console.log("HOME");
-//call get function
-    let data = getUser()
     mounted = true;
+    console.log("HOME");
+    //call get function
+    let data = getUser()
+    getBanner().then((_banner)=>{
+      console.log(_banner);
+      
+    })
+    
+    
+    //console.log(client);
   }
   return (
     <>
-      <Head>
-        
-        <meta name="description" content="Next-Express-App" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <h1>Index</h1>
+      
+      <HeroBanner></HeroBanner>
+      <div className='products-heading'>
+        <h2>Best Selling Products</h2>
+        <p>Speakers of many variations</p>
+      </div>
+      <div className='products-container'>
+        {['Product 1', 'Product 2'].map(
+          (product)=> product)}
+      </div>
+      <FooterBanner></FooterBanner>
       <h1 id='target'></h1>
     </>
   )
@@ -50,14 +67,53 @@ async function getUser(){
     //console.log(data);
   } catch (error) {
     //console.log(error.response.data); // this is the main part. Use the response property from the error object
-    
-    
+
+    return error.response;
+  }
+}
+
+async function getBanner(){
+  try {
+    let res = await axios({
+      method: 'get',
+      url: 'https://9z1x9qfr.api.sanity.io/v2023-02-05/data/query/production?query=*[_type == "product"]',
+      withCredentials: true,
+      headers:{
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials':true,
+        
+      },
+      
+      
+    }).then((response)=>{
+      console.log('RESPONSE');
+      console.log(response.data.email);
+      let target = document.getElementById("target")
+      console.log(target);
+      //target.innerText = response.data.email
+      return response
+      //window.location.href = response.data
+    })
+    //console.log(res);
+    return res
+    //let data = await res.data;
+    //console.log(data);
+  } catch (error) {
+    //console.log(error.response.data); // this is the main part. Use the response property from the error object
+
     return error.response;
   }
 }
 
 
-/*<main className={styles.main}>
+/*<Head>
+        
+        <meta name="description" content="Next-Express-App" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      
+      <main className={styles.main}>
         <div className={styles.description}>
           <p>
             Get started by editing&nbsp;

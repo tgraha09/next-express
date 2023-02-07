@@ -1,4 +1,4 @@
-GET http://localhost:3000
+GET https://<9z1x9qfr>.api.sanity.io/v2023-02-05/data/query/<production>
 
 ###
 

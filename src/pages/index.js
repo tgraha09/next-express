@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react'
-//import Head from 'next/head'
-//import Image from 'next/image'
-//import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
 import axios from 'axios'
 import { Product, FooterBanner, HeroBanner} from 'components';
@@ -10,28 +7,47 @@ import { client } from 'lib/client';
 
 //const inter = Inter({ subsets: ['latin'] })
 let mounted = false;
+//https://stackoverflow.com/questions/54936559/using-async-await-in-react-component
 
 
 export default function Home(){
 //const [token, setToken] = useState(null);
   
-  if(mounted== false){
-    mounted = true;
-    console.log("HOME");
-    //call get function
-    let data = getUser()
-    getBanner().then((_banner)=>{
-      console.log(_banner);
-      
-    })
-    
-    
-    //console.log(client);
-  }
+const [banner, setBanner] = useState([]);
+const [products, setProducts] = useState([]);
+const [user, setUser] = useState([]);
+const [bannerLoaded, setBannerLoaded] = useState(false);
+const [productsLoaded, setProductsLoaded] = useState(false);
+const [userLoaded, setUserLoaded] = useState(false);
+//let res = fetchBanner();
+useEffect(() => {
+  (async () => {
+    setBannerLoaded(false);
+    let resBanner = await getBanner() //fetchBanner();
+    //console.log(res.data);
+    if (resBanner.data) {
+      console.log(resBanner.data);
+      setBanner(resBanner.data.result);
+      setBannerLoaded(true);
+    }
+    setBannerLoaded(false);
+
+    let resUser = await getUser() //fetchBanner();
+    //console.log(resUser);
+    if (resUser.data) {
+      console.log(resUser.data);
+      setUser(resUser.data);
+      setUserLoaded(true);
+    }
+    setUserLoaded(false);
+  })();
+}, []);
+
+//console.log(banner);
   return (
     <>
       
-      <HeroBanner></HeroBanner>
+      <HeroBanner heroBanner={banner.length && banner[0]}></HeroBanner>
       <div className='products-heading'>
         <h2>Best Selling Products</h2>
         <p>Speakers of many variations</p>
@@ -40,10 +56,23 @@ export default function Home(){
         {['Product 1', 'Product 2'].map(
           (product)=> product)}
       </div>
+      <h1 id='target'>{user.email}</h1>
       <FooterBanner></FooterBanner>
-      <h1 id='target'></h1>
+      
     </>
   )
+}
+
+async function fetchBanner(){
+  console.log('fetchBanner');
+  try {
+    let response = await fetch('https://9z1x9qfr.api.sanity.io/v2023-02-05/data/query/production?query=*[_type == "banner"]');
+    let json = await response.json();
+    return { success: true, data: json };
+  } catch (error) {
+    console.log(error);
+    return { success: false };
+  }
 }
 
 async function getUser(){
@@ -54,15 +83,16 @@ async function getUser(){
       url: '/current',
       
     }).then((response)=>{
-      console.log('RESPONSE');
-      console.log(response.data.email);
-      let target = document.getElementById("target")
-      console.log(target);
-      target.innerText = response.data.email
+      //console.log('RESPONSE');
+      //console.log(response);
+      //let target = document.getElementById("target")
+      //console.log(target);
+      //target.innerText = response.data.email
       return response
       //window.location.href = response.data
     })
-    console.log(res);
+    return res
+    //console.log(res);
     //let data = await res.data;
     //console.log(data);
   } catch (error) {
@@ -71,25 +101,24 @@ async function getUser(){
     return error.response;
   }
 }
-
+//[_type == "product"]
 async function getBanner(){
   try {
     let res = await axios({
       method: 'get',
-      url: 'https://9z1x9qfr.api.sanity.io/v2023-02-05/data/query/production?query=*[_type == "product"]',
+      url: 'https://9z1x9qfr.api.sanity.io/v2023-02-05/data/query/production?query=*[_type == "banner"]',
       withCredentials: true,
       headers:{
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials':true,
-        
       },
       
       
     }).then((response)=>{
-      console.log('RESPONSE');
-      console.log(response.data.email);
-      let target = document.getElementById("target")
-      console.log(target);
+      //console.log('RESPONSE');
+      //console.log(response.data);
+      //let target = document.getElementById("target")
+      //console.log(target);
       //target.innerText = response.data.email
       return response
       //window.location.href = response.data

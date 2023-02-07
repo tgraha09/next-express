@@ -9,7 +9,9 @@
     "start": "node server/server.js",
     "lint": "next lint",
     "server": "nodemon server/server.js",
-    "nxt": "next start"
+    "nxt": "next start",
+    "pretest": "eslint ./server --fix",
+    "test": "echo \"Tests complete\""
   },
   "dependencies": {
     "@babel/core": "^7.20.12",

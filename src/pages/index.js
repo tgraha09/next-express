@@ -24,7 +24,6 @@ useEffect(() => {
   (async () => {
     setBannerLoaded(false);
     let resBanner = await getBanner() //fetchBanner();
-    //console.log(res.data);
     if (resBanner.data) {
       console.log(resBanner.data);
       setBanner(resBanner.data.result);
@@ -33,13 +32,14 @@ useEffect(() => {
     setBannerLoaded(false);
 
     let resUser = await getUser() //fetchBanner();
-    //console.log(resUser);
     if (resUser.data) {
       console.log(resUser.data);
       setUser(resUser.data);
       setUserLoaded(true);
     }
     setUserLoaded(false);
+
+    
   })();
 }, []);
 

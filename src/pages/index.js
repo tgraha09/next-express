@@ -46,7 +46,7 @@ useEffect(() => {
 //console.log(banner);
   return (
     <>
-      
+       
       <HeroBanner heroBanner={banner.length && banner[0]}></HeroBanner>
       <div className='products-heading'>
         <h2>Best Selling Products</h2>

@@ -27,11 +27,12 @@ body, * {
   flex-direction: row;
   width: fit-content;
   max-width: 400px;
-  max-height: 400px;
+  max-height: fit-content;
   min-width: 200px;
   min-height: 200px;
   overflow-x: scroll;
   scroll-snap-type: x mandatory;
+  margin: 1rem 0rem 1rem 0rem;
 }
 
 

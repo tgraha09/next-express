@@ -1,0 +1,67 @@
+
+.product-link{
+    width: fit-content;
+    display: block;
+}
+
+
+/*.heroBannerWrap:not(#textBannerWrap){
+    position: absolute;
+    background-color: lightgray;
+    overflow: visible;
+    width: 100%;
+    min-height: 300px;
+    /*display: flex;
+    justify-content: center;
+}
+
+.heroBannerImage{
+    position: relative;
+    margin-top: 7vh;
+    max-height: 30vh;
+    max-width: 100vw;
+    max-height: 30vh;
+    height: auto;
+    
+    display: flex;
+    justify-content: center;
+   
+    display: flex;
+    justify-content: center;
+    /*transform: scale(0.75, 0.75);
+}
+
+.heroBannerImage > img{
+    min-width: 250px;
+    min-height: 250px;
+    max-width: 100vw;
+    max-height: 30vh;
+    height: auto;
+    width: auto\9;
+}
+  
+.textBannerWrap{
+    position: absolute;
+    max-width: 30vw;
+    min-width: 200px;
+    margin: 2vw 2vw;
+    z-index: 1;
+}
+
+.textBannerWrap>h1{
+    position: relative;
+    color: white;
+    word-wrap: normal;
+}*/
+
+
+
+/*.textBannerWrap >h1{
+  color: white;
+  font-size: 2em;
+  text-transform: uppercase;
+}
+*/
+/*@media screen and (max-width: 640px) {
+    
+}*/

@@ -26,7 +26,8 @@ body, * {
   display: flex;
   flex-direction: row;
   width: fit-content;
-  max-width: 30vw;
+  max-width: 400px;
+  max-height: 400px;
   min-width: 200px;
   min-height: 200px;
   overflow-x: scroll;

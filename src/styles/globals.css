@@ -8,6 +8,10 @@ body, * {
 
 }
 
+html{
+  scroll-behavior: smooth;
+}
+
 .product-link{
   width: fit-content;
   display: block;
@@ -25,13 +29,17 @@ body, * {
 #car-wrap{
   display: flex;
   flex-direction: row;
-  width: fit-content;
+  width: 30vw;
+  
+
   max-width: 400px;
-  max-height: fit-content;
+  
   min-width: 200px;
   min-height: 200px;
+  
   overflow-x: scroll;
   scroll-snap-type: x mandatory;
+  
   margin: 1rem 0rem 1rem 0rem;
 }
 

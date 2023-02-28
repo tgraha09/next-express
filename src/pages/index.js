@@ -50,18 +50,6 @@ useEffect(() => {
     }*/
     
     
-    //element.scrollTop = 10;
-
-    /*$(document).on(function (){
-      //$("#product-1").on
-      setInterval(()=>{
-        var pos = $('#car-wrap').scrollLeft();
-        $("#car-wrap").animate({scrollLeft: pos + 300}, 800);
-      }, 1000);
-      /*$("#car-wrap").animate({
-        scrollLeft: $("#product-1").offset().left - 250
-      }, 800);*/
-    //});
     setUserLoaded(false);
     let resUser = await getUser() //fetchBanner();
     if (resUser.data) {
@@ -96,7 +84,7 @@ useEffect(() => {
       setInterval(()=>{
         var el = document.querySelector("#car-wrap");
         Carousel(el, resProducts.data.result.length)
-        
+        scrollCount++
         
       }, timeOut);
       setProducts(resProducts.data);
@@ -148,10 +136,39 @@ useEffect(() => {
 //<HeroBanner heroBanner={banner.length && banner[0]}></HeroBanner>
 let scrollCount=0
 let width = 0
-let timeOut = 8000
+let timeOut = 6000
 function Carousel(el, length){
+  //console.log('Carousel');
+  if(el==undefined){
+    return
+  }
+  //document.lastChild
   let firstChild = el.firstChild
   let childWidth = firstChild.getBoundingClientRect().width
+  /*new ResizeObserver(()=>{
+
+  }).observe(el)*/
+  /*var container = $(el),
+  scrollTo = $(el.lastChild);
+  //$(el).each(Child=>{})
+
+  if(container.scrollLeft()>=childWidth){
+    container.animate({
+      scrollLeft: 0
+    },1000, 'linear');
+    return
+  }
+  
+  container.animate({
+    scrollLeft: container.scrollLeft() + childWidth
+  }, 'linear');
+  
+  
+  console.log(container.scrollLeft());*/
+
+  /*container.scrollTop(
+      scrollTo.offset().top - container.offset().top + container.scrollTop()
+  );*/
   //document.body.getbo
   //console.log(childWidth, (childWidth*(length-1)));
   //let element = e.target
@@ -160,9 +177,17 @@ function Carousel(el, length){
   //el.scro
   //console.log(length);
 
+  //document.body
   
-  
-  if(el.scrollLeft == childWidth*(length-1)){
+  //console.log(el.getBoundingClientRect());
+  let ratio = el.offsetWidth*2 / el.scrollLeft
+  //console.log(el.getClientRects()[0], el.scrollLeft, scrollCount, ratio);
+  /*console.log(el.offsetWidth*2);
+  console.log(el.scrollLeft);
+  console.log(ratio, length);*/
+  //if(el.getBoundingClientRect().width)
+  //|| (ratio<1 && window.innerWidth<400)
+  if(ratio<1.1){
     //console.log("END");
     isEnded=true
     //console.log(isEnded);
@@ -176,19 +201,16 @@ function Carousel(el, length){
       console.log(el.scrollLeft);
     }, 1000);*/
     
-    scrollCount=-1
-    
+    //scrollCount=-1
+    return
   }
 
   if(el.scrollLeft==0 && isEnded==true){
     setTimeout(() => {
-      isEnded=false
-    }, 1000);
-    el.scrollTo({
-      top: 0,
-      left: el.scrollLeft + childWidth,
-      behavior: 'smooth',
-    });
+      
+    }, 2000);
+    isEnded = false
+    return
   }
   
   if(isEnded==false){
@@ -197,8 +219,10 @@ function Carousel(el, length){
       left: el.scrollLeft + childWidth,
       behavior: 'smooth',
     });
+    //console.log(ratio);
+    scrollCount++
   }
-  scrollCount++
+  
 }
 
 /*<div className='products-container'>

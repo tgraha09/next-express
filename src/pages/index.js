@@ -136,7 +136,7 @@ useEffect(() => {
 //<HeroBanner heroBanner={banner.length && banner[0]}></HeroBanner>
 let scrollCount=0
 let width = 0
-let timeOut = 6000
+let timeOut = 4000
 function Carousel(el, length){
   //console.log('Carousel');
   if(el==undefined){
@@ -206,9 +206,7 @@ function Carousel(el, length){
   }
 
   if(el.scrollLeft==0 && isEnded==true){
-    setTimeout(() => {
-      
-    }, 2000);
+    
     isEnded = false
     return
   }

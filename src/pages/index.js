@@ -84,7 +84,7 @@ useEffect(() => {
       setInterval(()=>{
         var el = document.querySelector("#car-wrap");
         Carousel(el, resProducts.data.result.length)
-        scrollCount++
+        
         
       }, timeOut);
       setProducts(resProducts.data);
@@ -145,82 +145,41 @@ function Carousel(el, length){
   //document.lastChild
   let firstChild = el.firstChild
   let childWidth = firstChild.getBoundingClientRect().width
-  /*new ResizeObserver(()=>{
-
-  }).observe(el)*/
-  /*var container = $(el),
-  scrollTo = $(el.lastChild);
-  //$(el).each(Child=>{})
-
-  if(container.scrollLeft()>=childWidth){
-    container.animate({
-      scrollLeft: 0
-    },1000, 'linear');
-    return
-  }
   
-  container.animate({
-    scrollLeft: container.scrollLeft() + childWidth
-  }, 'linear');
-  
-  
-  console.log(container.scrollLeft());*/
-
-  /*container.scrollTop(
-      scrollTo.offset().top - container.offset().top + container.scrollTop()
-  );*/
-  //document.body.getbo
-  //console.log(childWidth, (childWidth*(length-1)));
-  //let element = e.target
-  //console.log("TEST", $(element));
-  
-  //el.scro
-  //console.log(length);
-
-  //document.body
-  
-  //console.log(el.getBoundingClientRect());
   let ratio = el.offsetWidth*2 / el.scrollLeft
-  //console.log(el.getClientRects()[0], el.scrollLeft, scrollCount, ratio);
-  /*console.log(el.offsetWidth*2);
-  console.log(el.scrollLeft);
-  console.log(ratio, length);*/
-  //if(el.getBoundingClientRect().width)
-  //|| (ratio<1 && window.innerWidth<400)
+  
   if(ratio<1.1){
-    //console.log("END");
-    isEnded=true
-    //console.log(isEnded);
-    el.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    });
-    //timeOut=1000
-    /*setTimeout(function() {
-      console.log(el.scrollLeft);
-    }, 1000);*/
     
-    //scrollCount=-1
-    return
+    let children = el.children
+    //console.log(children);
+    let arr = []
+    for (let i = 0; i < children.length; i++){
+      let child = children[i]
+      if(el.lastChild.isEqualNode(child)==false){
+        
+        //console.log(child);
+        arr.push(child.cloneNode(true))
+        child.style.display = "none";
+        //el.removeChild(child)
+      }
+    }
+    while (el.childNodes.length > 1) {
+      el.removeChild(el.firstChild);
+    }
+    arr.forEach(child => {
+      el.append(child)
+    });
+    arr.length = 0
   }
 
-  if(el.scrollLeft==0 && isEnded==true){
-    
-    isEnded = false
-    return
-  }
+  el.scrollTo({
+    top: 0,
+    left: el.scrollLeft + childWidth,
+    behavior: 'smooth',
+  });
   
-  if(isEnded==false){
-    el.scrollTo({
-      top: 0,
-      left: el.scrollLeft + childWidth,
-      behavior: 'smooth',
-    });
-    //console.log(ratio);
-    scrollCount++
-  }
-  
+  //scrollCount++;
+  //console.log(scrollCount);
 }
 
 /*<div className='products-container'>

@@ -52,11 +52,14 @@ useEffect(() => {
     
     setUserLoaded(false);
     let resUser = await getUser() //fetchBanner();
-    if (resUser.data) {
+    
+    if (resUser.data.status == 200) {
       //console.log(resUser.data);
-      setUser(resUser.data);
+      setUser(resUser.data.user);
       setUserLoaded(true);
     }
+    
+    
     //setUserLoaded(false);
 
     setBannerLoaded(false);
@@ -94,10 +97,11 @@ useEffect(() => {
 
     
   })();
+  console.log(user);
 }, []);
 
   //console.log(featured);
-
+  
   //console.log(products);
   return (
     <>
@@ -126,7 +130,7 @@ useEffect(() => {
       
 
       
-      <h1 id='target'>{user.email}</h1>
+      <h1 id='target'>{user?.email}</h1>
       <FooterBanner></FooterBanner>
       
     </>
@@ -254,6 +258,7 @@ async function getUser(){
       url: '/current',
       
     }).then((response)=>{
+      console.log(response);
 
       return response
       //window.location.href = response.data

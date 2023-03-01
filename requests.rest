@@ -2,7 +2,7 @@ GET https://<9z1x9qfr>.api.sanity.io/v2023-02-05/data/query/<production>
 
 ###
 
-GET http://localhost:3000/api/comments
+GET http://localhost:3000/users
 
 ###
 
@@ -16,10 +16,10 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:3000/users/login
+POST http://localhost:3000/user/login
 Content-Type: application/json
 
 {
-    "username": "expressuser1",
-    "password": "password"
+    "email": "tfire09",
+    "psw": "prime100"
 }

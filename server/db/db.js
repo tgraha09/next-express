@@ -23,7 +23,7 @@ async function connectMongoose(_uri){
 
 //adds user to db
 async function addUser(_user, req, res){
-    console.log(_user);
+    //console.log(_user);
     try{
         //salt password 
         const salt = await bcrypt.genSalt()
@@ -57,7 +57,7 @@ async function addUser(_user, req, res){
 async function loginUser(_user, req, res){
 
     try{
-
+        //console.log(_user);
         const data = await User.find({ email: _user.email}).lean()
         let doc = data[0]
 
@@ -65,6 +65,7 @@ async function loginUser(_user, req, res){
             currentUser = doc
             //currentUser
         }
+        
     }
     catch(error){
         //console.log("CATCH");
@@ -72,7 +73,7 @@ async function loginUser(_user, req, res){
         message: "CATCH: "+ error.message}
     }
     //console.log(currentUser);
-    return {status: 200, redirect:"/", error: false, user: {email:currentUser.email},
+    return {status: 200, redirect:"/", error: false, user: {email: currentUser.email},
     message: "Successfully logged in"}
 }
 

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Image Carousel with Buttons</title>
+	<style>
+		.carousel-container {
+			position: relative;
+			margin: auto;
+			width: 100%;
+			max-width: 500px;
+			height: 400px;
+			overflow: hidden;
+		}
+
+		.carousel-images {
+			display: flex;
+			width: 300%;
+			transition: transform 1s ease-in-out;
+		}
+
+		.carousel-image {
+			flex-shrink: 0;
+			width: 33.33%;
+			height: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		#prev-btn,
+		#next-btn {
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			padding: 10px;
+			border: none;
+			background-color: #000;
+			color: #fff;
+			font-size: 18px;
+			z-index: 1;
+		}
+
+		#prev-btn {
+			left: 0;
+		}
+
+		#next-btn {
+			right: 0;
+		}
+	</style>
+</head>
+<body>
+	<div class="carousel-container">
+		<div class="carousel-images">
+			<div class="carousel-image">
+				<img src="https://via.placeholder.com/800x400?text=Image+1" alt="Image 1">
+			</div>
+			<div class="carousel-image">
+				<img src="https://via.placeholder.com/800x400?text=Image+2" alt="Image 2">
+			</div>
+			<div class="carousel-image">
+					<img src="https://via.placeholder.com/800x400?text=Image+3" alt="Image 3">
+			</div>
+		</div>
+		<button id="prev-btn">Previous</button>
+		<button id="next-btn">Next</button>
+	</div>
+
+	<script>
+		const carouselImages = document.querySelector('.carousel-images');
+		const prevBtn = document.querySelector('#prev-btn');
+		const nextBtn = document.querySelector('#next-btn');
+
+		let currentIndex = 0;
+
+		function showImage(index) {
+			const imageWidth = carouselImages.querySelector('.carousel-image').offsetWidth;
+			const newPosition = -imageWidth * index;
+			carouselImages.style.transform = `translateX(${newPosition}px)`;
+			currentIndex = index;
+		}
+
+		function nextImage() {
+			let newIndex = currentIndex + 1;
+			if (newIndex >= carouselImages.children.length) {
+				newIndex = 0;
+				carouselImages.style.transition = 'none';
+				showImage(newIndex);
+				requestAnimationFrame(() => {
+					carouselImages.style.transition = 'transform 1s ease-in-out';
+					currentIndex = newIndex;
+				});
+			} else {
+				showImage(newIndex);
+			}
+		}
+
+		function prevImage() {
+			let newIndex = currentIndex - 1;
+			if (newIndex < 0) {
+				newIndex = carouselImages.children.length - 1;
+				carouselImages.style.transition = 'none';
+				const imageWidth = carouselImages.querySelector('.carousel-image').offsetWidth;
+				const newPosition = -imageWidth * newIndex;
+				carouselImages.style.transform = `translateX(${newPosition}px)`;
+				requestAnimationFrame(() => {
+					carouselImages.style.transition = 'transform 1s ease-in-out';
+					currentIndex = newIndex;
+				});
+			} else {
+				showImage(newIndex);
+			}
+		}
+
+		prevBtn.addEventListener('click', prevImage);
+		nextBtn.addEventListener('click', nextImage);
+
+		showImage(currentIndex);
+	</script>
+</body>
+</html>

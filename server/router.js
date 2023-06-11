@@ -1,71 +1,53 @@
 const bcrypt = require('bcrypt')
+const db = require('./db/db')
 
-const posts = [
-    {
-        username: 'Taurian',
-        title: 'Post 1'
-    },
-    {
-        username: 'Ian',
-        title: 'Post 2'
-    },
-    {
-        username: 'Pam',
-        title: 'Post 3'
-    },
-    {
-        username: 'Tarik',
-        title: 'Post 4'
-    }
-]
-
-const users = []
-
-const router = (app, handle) =>{
-    app.get('/test', (req, res) => {
-        return handle.render(req, res, '/home')
-    })
-    app.get('/posts', (req,res)=>{
-        res.json(posts)
-    })
-    app.get('/users', (req,res)=>{
-        res.json(users)
-    })
-    app.post('/users', async (req,res)=>{
-        //hashes password from user post
-        try{
-            const salt = await bcrypt.genSalt()
-            const hashedPassword = await bcrypt.hash(req.body.password, salt)
-            
-            const user = {username: req.body.username, 
-                password: hashedPassword}
-            users.push(user)
-            res.status(201).send() 
+const router = async (server) =>{
+    server.post('/user/signup', async (req, res) => {
+      
+        const user = req.body
+        let result = await db.addUser(user, req, res)
+        //console.log(result.message);
+        req.session.message = result.message
+        if(result.error){
+        //res.statusCode = result.status;
+        return res.status(result.status).send(result.message)//res.send(result.message) //send(result.message) //status(result.status)
         }
-        catch{
-            res.status(500).send()
-        }
-                    
+        //console.log("SUCESS", result.redirect);
+        return res.status(result.status).json(result.redirect) //.json(result.redirect);
+
     })
-    app.post('/users/login', async (req,res)=>{
+
+    server.post('/user/login', async (req, res) => {
+        const user = req.body
+        let result = await db.loginUser(user, req, res)
         
-        const user = users.find(user=>user.username = req.body.username)
-        if(user==null){
-            return res.status(400).send('Cannot find user')
+        req.session.data = {
+            ...result
         }
-        try{
-            if(await bcrypt.compare(req.body.password, user.password)){
-                res.send('Success')
-            } else{
-                res.send('Not Allowed')
-            }
-        }catch{
-            res.status(500).send()
-        }        
+        req.session.save()
+        const {message, status, redirect} = req.session.data 
+        if(result.error){
+            
+            return res.status(status).send(message)//res.send(result.message) //send(result.message) //status(result.status)
+        }
+        
+        return res.status(status).json(redirect) //.json(result.redirect);*/
+    
     })
-    app.get('/login', (req,res)=>{
-        //Authenticate User
+
+    server.get('/current', async (req, res) => {
+    
+        try {
+            const {user} = await req.session.data
+            
+            return res.status(200).json({status: 200, error: false, message: "USER FOUND", user})
+        } catch (error) {
+            return res.status(404).json({status: 404, redirect:undefined, error: true, 
+            message: "CATCH: "+ error.message})
+        }
+    
     })
+    
 }
 
 module.exports = router;

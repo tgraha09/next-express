@@ -1,0 +1,83 @@
+<style>
+	body {
+	  display: flex;
+	  justify-content: center;
+	  margin: 0;
+	}
+  
+	.container {
+	  position: relative;
+	  width: 500px;
+	  height: auto;
+	  overflow: hidden;
+	}
+  
+	.box {
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	  background-color: #f0f0f0;
+	  transition: transform 0.3s ease-in-out;
+	}
+  
+	.box img {
+	  max-width: 500px;
+	  width: 500px;
+	}
+  
+	.arrow {
+	  position: relative;
+	  width: 30px;
+	  height: 30px;
+	  background-color: #f0f0f0;
+	  border: none;
+	  cursor: pointer;
+	  z-index: 100;
+	}
+  
+	.arrow-left {
+	  float: left;
+	}
+  
+	.arrow-right {
+	  float: right;
+	}
+  </style>
+  
+  <div class="container">
+	<button class="arrow arrow-left">&#8592;</button>
+	<button class="arrow arrow-right">&#8594;</button>
+	<div class="box">
+	  <img src="https://cdn.shopify.com/s/files/1/0535/2738/0144/articles/shutterstock_1290320698_540x.jpg?v=1651099282" alt="Image 1">
+	</div>
+	<div class="box">
+	  <img src="https://ggsc.s3.amazonaws.com/images/made/images/uploads/The_Science-Backed_Benefits_of_Being_a_Dog_Owner_300_200_int_c1-1x.jpg" alt="Image 2">
+	</div>
+	<div class="box">
+	  <img src="https://media.istockphoto.com/id/636475496/photo/portrait-of-brown-puppy-with-bokeh-background.jpg?s=612x612&w=is&k=20&c=KPVw-doVk46CfdOr85bmz0tHLAzkctioXRu5GB_UTug=" alt="Puppy Image 2">
+	</div>
+  </div>
+  
+  <script>
+	const container = document.querySelector('.container');
+	const boxes = document.querySelectorAll('.box');
+	const rightButton = document.querySelector('.arrow-right');
+	const boxWidth = boxes[0].offsetWidth;
+	let counter = 0;
+  
+	window.onload = () => {
+	  for (let i = 0; i < boxes.length; i++) {
+		const box = boxes[i];
+		let j = (boxes.length - 1) - i;
+		box.style.zIndex = `${j}`;
+	  }
+	};
+  
+	rightButton.addEventListener('click', () => {
+	  let box = boxes[counter];
+	  box.style.transform = `translateX(-${boxWidth}px)`;
+	  box.style.transition = 'transform 0.3s ease-in-out';
+	  counter++;
+	});
+  </script>
+  

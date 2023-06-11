@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<style>
+
+body{
+  margin: 0;
+}
+.carousel-container {
+  display: flex;
+  flex-direction: column;
+  
+  /*overflow: hidden;*/
+  max-width: 400px;
+}
+
+.carousel-slide {
+  display: flex;
+  flex-direction: row;
+   /* 3 images in the carousel 
+  transition: transform 0.5s ease;*/
+}
+
+.carousel-slide > .item {
+  position: relative;
+  transition: transform 0.5s ease;
+}
+
+.carousel-slide > .item:last-child {
+ z-index: 1;
+}
+
+.item > img{
+  width: 400px;
+  
+}
+
+.carousel-slide.active {
+   /* Move the slide to the left */
+}
+
+
+.carousel-button {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 10px 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.carousel-button:first-child {
+
+}
+
+.carousel-button:last-child {
+  float: right;
+}
+
+.controls{
+  z-index: 9;
+}
+
+</style>
+<body>
+
+<div class="carousel-container">
+  <div class="carousel-slide">
+    <div class="item">
+      <img src="https://cdn.shopify.com/s/files/1/0535/2738/0144/articles/shutterstock_1290320698_540x.jpg?v=1651099282">
+    </div>
+    <div class="item">
+      <img src="https://dogtime.com/assets/uploads/2011/03/puppy-development.jpg">
+    </div>
+    <div class="item">
+      <img src="https://media.istockphoto.com/id/636475496/photo/portrait-of-brown-puppy-with-bokeh-background.jpg?s=612x612&w=is&k=20&c=KPVw-doVk46CfdOr85bmz0tHLAzkctioXRu5GB_UTug=">
+    </div>
+  </div>
+  <div class="controls">
+    <button class="carousel-button" onclick="previousImage()">Previous</button>
+    <button class="carousel-button" onclick="nextImage()">Next</button>
+  </div>
+
+</div>
+
+<p id="demo"></p>
+
+<script>
+const carouselSlide = document.querySelector('.carousel-slide');
+const images = document.querySelectorAll('.item')
+let counter = 0;
+
+let length = document.querySelectorAll('.carousel-slide .item').length
+let end = length - 1
+let first = images[0]
+let last = images[end]
+let restart = false
+let clicked = false
+let forward = true
+//document.querySelectorAll('.carousel-slide img');
+const slideWidth = carouselSlide.children[0].clientWidth;
+
+function nextImage() {
+  
+  if(forward == false){
+    forward = true
+  }
+
+  if(clicked){
+    return
+  }
+  
+  counter++
+ // console.log(counter);
+  for (let i = 0; i < images.length; i++) {
+    let element = images[i];
+    element.ontransitionend = (e)=>{
+      clicked = false
+    }
+    last.ontransitionend = (e)=>{
+      if(i == counter){
+        for (let k = 0; k < images.length; k++){
+          let el = images[k];
+          if(!element.isEqualNode(el)){
+            //console.log("LAST");
+            let dis = -slideWidth * (-1)
+            //console.log(dis);
+            el.style.transition = `none`
+            el.style.transform = `translateX(${dis}px)`;
+            last.style.zIndex = "3";
+            el.style.zIndex = "2";
+            restart = true
+          }
+        }
+        counter = -1
+      }
+    }
+
+      if(restart && element.isEqualNode(last)){
+        last.style.zIndex = "1";
+        element.style.transform = `translateX(${-slideWidth * (images.length)}px)`;
+        restart=false
+      }
+      else{
+        element.style.transition = `transform 0.5s ease`;
+        element.style.transform = `translateX(${-slideWidth * (counter)}px)`;
+      }
+    }
+  clicked = true
+}
+
+  
+
+let inverse = length-1
+function previousImage() {
+  if(forward){
+    forward = false
+    for (let i = 0; i < images.length; i++) {
+      const element = images[i];
+      element.ontransitionend = undefined
+      element.ontransitionstart = undefined
+    }
+  }
+  console.log('previousImage');
+  counter--
+  console.log(counter);
+  if(counter==-1){
+    counter=end
+  }
+  if(counter==end){
+    for (let i = 0; i < images.length; i++) {
+      const element = images[i];
+      //console.log(element);
+      if(!element.isEqualNode(first)){
+        console.log(element);
+        element.style.transition = `none` //transform 0.5s ease
+        element.style.transform = `translateX(${-slideWidth * (length)}px)`;
+      }
+      else{
+        element.ontransitionstart = (e)=>{
+          console.log(element);
+          for (let k = 0; k < images.length; k++){
+            let el = images[k];
+            if(!element.isEqualNode(el)){
+              //console.log("LAST");
+              //let dis = -slideWidth * (-1)
+              //console.log(dis);
+              el.style.transition = `transform 0.5s ease`
+              el.style.transform = `translateX(${-slideWidth * (2)}px)`;
+              //last.style.zIndex = "3";
+              //el.style.zIndex = "2";
+              //restart = true
+            }
+          }
+        }
+        element.style.transform = `translateX(${-slideWidth * (-1)}px)`;
+      }
+      
+    }
+  }
+  else{
+    
+    for (let i = 0; i < images.length; i++) {
+      const element = images[i];
+      element.style.transform = `translateX(${-slideWidth * (counter)}px)`;
+    }
+  }
+}
+
+//console.log("SCR");
+/*setInterval(() => {
+  const images = carouselSlide.children//document.querySelectorAll('.carousel-slide img');
+  //carouselSlide.children
+  //let counter = 0;
+  const slideWidth = images[0].clientWidth;
+
+  //carouselSlide.style.transform = `translateX(${-slideWidth * counter}px)`;
+
+  
+  let width = carouselSlide.style.width
+  if(counter>0){
+    //carouselSlide.removeChild(images[counter-1])
+  }
+  if (end) {
+    //carouselSlide.style.transform = `translateX(${-slideWidth * counter}px)`;
+    //carouselSlide.style.width = width + images.length
+    //document.body.style.width
+    //carouselSlide.style.transitionDuration = '0s'; // Set the transition duration to zero
+    /*let children = carouselSlide.children
+    let arr = []
+    for (let i = 0; i < children.length; i++){
+        let child = children[i]
+        //console.log(carouselSlide.children);
+        arr.push(child.cloneNode(true))
+    }
+    let remove = 0
+    
+    while (carouselSlide.childNodes.length > 2) {
+      //console.log(counter);
+      carouselSlide.removeChild(carouselSlide.firstChild);
+    }
+    console.log(carouselSlide.children.length);
+    if(carouselSlide.hasChildNodes()==false){
+      console.log("NONE");
+    }*/
+    
+    /*arr.forEach(child => {
+      carouselSlide.append(child)
+    });*/
+    
+    //counter = 0;
+
+    //carouselSlide.style.transform = `translateX(${-slideWidth * counter}px)`;
+    /*setTimeout(() => {
+      carouselSlide.style.transitionDuration = '0.5s'; // Set the transition duration back to its original value
+    }, 1000);
+    return
+  } else {
+    //document.body.cloneNode
+    copy = images[counter].cloneNode(true)
+    console.log(copy);
+    counter++;
+    carouselSlide.style.transform = `translateX(${-slideWidth * counter}px)`;
+    carouselSlide.appendChild(copy)
+    
+  }
+}, 3000);*/
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

@@ -69,17 +69,26 @@ async function loginUser(_user, req, res){
     }
     catch(error){
         //console.log("CATCH");
-        return {status: 500,redirect:"/signup", error: true, 
+        return {status: 500,redirect:"/signup", error: true, success: false,
         message: "CATCH: "+ error.message}
     }
     //console.log(currentUser);
-    return {status: 200, redirect:"/", error: false, user: {email: currentUser.email},
+    return {status: 200, redirect:"/", error: false, user: {email: currentUser.email, success: true},
     message: "Successfully logged in"}
+}
+
+async function signOutUser(_user, req, res){
+    currentUser = undefined
+    
+    
+    return {status: 200, redirect:"/", error: false, user: currentUser, success: false,
+    message: "Successfully logged Out"}
 }
 
 module.exports = {
     connectMongoose,
     addUser,
     loginUser,
+    signOutUser,
     currentUser
 }

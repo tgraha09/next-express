@@ -1,0 +1,27 @@
+.nav-wrap{
+  display: flex;
+  align-items:center;
+  justify-content: space-between;
+  width: 100%;
+  /*flex-direction: row-reverse;*/
+  min-height: 50px;
+  background-color: #EBEBEB;
+}
+
+
+.nav-logo{
+  position: relative;
+  height: auto;
+  max-width: 150px;
+  
+}
+
+.link-wrap{
+  display: flex;
+  flex-direction: row;
+  
+}
+
+.link-wrap>a{
+  margin-right: 2rem;
+}

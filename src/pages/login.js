@@ -1,7 +1,8 @@
 import Head from 'next/head'
 import axios from 'axios'
 import React from 'react'
-
+//import styles from '../components/styles/Login.module.css'
+import { Navbar } from '@/components'
 
 export default function Login() {
     return (
@@ -12,7 +13,9 @@ export default function Login() {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <h1>Login</h1>
+        <Navbar></Navbar>
+        <h1 >Login</h1>
+        
         <LoginForm></LoginForm>
       </>
     )
@@ -20,30 +23,31 @@ export default function Login() {
 
   function LoginForm(){
     return (
-      <>
-        <form id='loginForm'>
-          <div className="container">
+      <div className='form-wrap'>
+        
+        <form id='loginForm' className='form'>
+        <hr />
 
-            <hr />
+        <label htmlFor="email"><b>Email</b></label>
+        <input type="text" placeholder="Enter Email" name="email" required />
 
-            <label htmlFor="email"><b>Email</b></label>
-            <input type="text" placeholder="Enter Email" name="email" required />
+        <label htmlFor="psw"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="psw" required />
 
-            <label htmlFor="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="psw" required />
+        <label>
+          <input type="checkbox" defaultChecked name="remember" /> Remember me
+        </label>
+
+        <div className="clearfix">
+          <button type="button" className="cancelbtn">Cancel</button>
+          <button className="signupbtn" onClick={submitUser}>Login</button>
+        </div>
+
+
             
-            <label>
-              <input type="checkbox" defaultChecked name="remember" /> Remember me
-            </label>
-            
-            <div className="clearfix">
-              <button type="button" className="cancelbtn">Cancel</button>
-              <button className="signupbtn" onClick={submitUser}>Login</button>
-            </div>
-          </div>
         </form>
         <h1 id='login-error'></h1>
-      </>
+      </div>
     )
   }
 

@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import axios from 'axios'
 import React from 'react'
-
+import { Navbar } from '@/components'
 
 export default function Signup() {
     return (
@@ -11,6 +11,7 @@ export default function Signup() {
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
+        <Navbar></Navbar>
         <h1>Signup</h1>
         <SignupForm></SignupForm>
       </>
@@ -19,11 +20,9 @@ export default function Signup() {
 
   function SignupForm(){
     return (
-      <>
-        <form id='signupForm'>
-          <div className="container">
-            
-            <p>Please fill in this form to create an account.</p>
+      <div className='form-wrap'>
+        <form id='signupForm' className='form'>
+        <p>Please fill in this form to create an account.</p>
             <hr />
 
             <label htmlFor="email"><b>Email</b></label>
@@ -43,10 +42,9 @@ export default function Signup() {
               <button type="button" className="cancelbtn">Cancel</button>
               <button className="signupbtn" onClick={submitUser}>Sign Up</button>
             </div>
-          </div>
         </form>
         <h1 id='signup-error'></h1>
-      </>
+      </div>
     )
   }
 

@@ -47,6 +47,18 @@ const router = async (server) =>{
         }
     
     })
+
+    server.get('/user/signout', async (req, res) => {
+    
+        let result = await db.signOutUser()
+        req.session.data = {
+            ...result
+        }
+        req.session.save()
+        //console.log(result);
+        return res.status(200).json(result) //result.redirect
+        //console.log(result);
+    })
     
 }
 

@@ -1,61 +1,47 @@
 import React, { useState, useEffect } from 'react'
-import styles from '@/styles/Home.module.css'
+//import home from '@/styles/Home.module.css'
 import axios from 'axios'
-import { Product, FooterBanner, HeroBanner} from '@/components';
-import { client } from 'lib/client';
-import Link from 'next/link';
-import $ from 'jquery'
+import { Product, FooterBanner, HeroBanner, Navbar} from '@/components';
+//import { client } from 'lib/client';
+//import Link from 'next/link';
+//import $ from 'jquery'
 import { Carousel, getContent, forward, backward} from '@/utilities/utils';
+import carStyle from '@/styles/Carousel.module.css'
 
-
-let mounted = false;
-let scrollCount=0
-let width = 0
-let timeOut = 4000
-let isEnded = false;
-//https://stackoverflow.com/questions/54936559/using-async-await-in-react-component
-
+let timeOut = 5000
 
 export default function Home(){
-
 const [content, setContent] = useState([]);
-
 const [contentLoaded, setContentLoaded] = useState(false);
 
-let rendered = false
-let interval 
 useEffect(() => {
   (async () => {
-    
+    //console.log("USE EFFECT");
     let load = await getContent()
+    //console.log("LOAD: ", load);
     setContent(load)
     setContentLoaded(true)
-    if(window.location.pathname != "/"){
-      clearInterval(interval)
-      console.log("CLEAR");
-    }
-    else {
-      
-      interval = setInterval(()=>{
-        Carousel()
-      }, timeOut)
-
-    }
+    setInterval(()=>{
+      Carousel()
+    }, timeOut)
 
   })();
-
+  
 }, []);
 
+
+//console.log("CONTENT: ", content?.user);
+//console.log("TEST");
+//console.log(content);
   return (
     <>
     
-    <Link className='link' href="/login">login</Link>
-    <Link className='link' href="/signup">Signup</Link>
+      <Navbar loggedIn={content?.user?.success}></Navbar>
     
     
       <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
       
-      <div className='container'>
+      <div className={carStyle.container}>
         <div className="prev" onClick={backward}>
           <a>
           ❮

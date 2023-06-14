@@ -3,6 +3,8 @@ import { getBanner, getFeatured, getProducts, getUser } from './network/network'
 
 let counter = 0;
 let pauseCarousel = false
+var carouselSlide, images, slideWidth, length
+
 
 async function Carousel(){
   
@@ -11,96 +13,55 @@ async function Carousel(){
     return
   }
 
-  const carouselSlide = document.querySelector('#car-wrap');
-  //const car = carouselSlide.cloneNode(true)
-  const images = document.querySelectorAll('.product-link')
-  const slideWidth = carouselSlide?.children[0]?.clientWidth;
-  //element.style.transform = `translateX(${-slideWidth * (counter)}px)`;
-  let length = document.querySelectorAll('#car-wrap .product-link').length-1
+  carouselSlide = document.querySelector('#car-wrap');
+  images = document.querySelectorAll('.product-link')
+  slideWidth = carouselSlide?.children[0]?.clientWidth;
+  length = document.querySelectorAll('#car-wrap .product-link').length-1
   counter++
 
-  if(counter <length+1){
-    for (let i = 0; i < images.length; i++) {
-      const element = images[i];
-      element.style.transform = `translateX(${-slideWidth * (counter)}px)`;
-    }
-    
+  if(counter >=length+1){
+    counter = 0
   }
-  else{
-   // console.log("ELSE");
-    for (let i = 0; i < images.length; i++) {
-      const element = images[i];
-
-      counter = 0
-      element.style.transform = `translateX(${-slideWidth * (counter)}px)`;
-    }
-  }
+  
+  MoveCarousel(images, slideWidth, counter)
 }
 
 async function forward(){
   pauseCarousel = true
-
-  const carouselSlide = document.querySelector('#car-wrap');
-  const images = document.querySelectorAll('.product-link')
-  const slideWidth = carouselSlide.children[0].clientWidth;
-  let length = document.querySelectorAll('#car-wrap .product-link').length-1
+  carouselSlide = document.querySelector('#car-wrap');
+  images = document.querySelectorAll('.product-link')
+  slideWidth = carouselSlide?.children[0]?.clientWidth;
+  length = document.querySelectorAll('#car-wrap .product-link').length-1
   counter++
-
-  if(counter <length+1){
-    images[0].ontransitionstart= (e)=>{
-      //console.log("START");
-      //pauseCarousel = true
-    }
-    images[0].ontransitionend = (e)=>{
-      pauseCarousel = false
-    }
-
-    for (let i = 0; i < images.length; i++) {
-      const element = images[i];
-      element.style.transform = `translateX(${-slideWidth * (counter)}px)`;
-    }
-    
+  images[0].ontransitionstart= (e)=>{
+    //console.log("START");
+    //pauseCarousel = true
   }
-  else{
-   // console.log("ELSE");
-    for (let i = 0; i < images.length; i++) {
-      const element = images[i];
-
-      counter = 0
-      element.style.transform = `translateX(${-slideWidth * (counter)}px)`;
-    }
+  images[0].ontransitionend = (e)=>{
+    pauseCarousel = false
   }
+
+  if(counter >=length+1){
+    counter = 0
+  }
+  
+  MoveCarousel(images, slideWidth, counter)
   
 }
 
 
 async function backward(){
   pauseCarousel = true
-
-  const carouselSlide = document.querySelector('#car-wrap');
-  const images = document.querySelectorAll('.product-link')
-  const slideWidth = carouselSlide.children[0].clientWidth;
-  let length = document.querySelectorAll('#car-wrap .product-link').length-1
+  carouselSlide = document.querySelector('#car-wrap');
+  images = document.querySelectorAll('.product-link')
+  slideWidth = carouselSlide?.children[0]?.clientWidth;
+  length = document.querySelectorAll('#car-wrap .product-link').length-1
   counter--
-    if(counter >= 0){
-      //console.log("NORMAL");
-      for (let i = 0; i < images.length; i++) {
-        const element = images[i];
-        element.style.transform = `translateX(${-slideWidth * (counter)}px)`;
-        
-      }
-      
-    }
-    else{
-    //console.log("ELSE");
-    for (let i = 0; i < images.length; i++) {
-      const element = images[i];
-      // console.log(element);
-      //element.style.transition = `transform 0.5s ease`;
-      counter = length
-      element.style.transform = `translateX(${-slideWidth * (counter)}px)`;
-    }
+  if(counter <0){
+    counter = length
   }
+  
+  MoveCarousel(images, slideWidth, counter)
 }
 
 async function getContent(){
@@ -116,13 +77,14 @@ async function getContent(){
   }
 }
 
-
+function MoveCarousel(_images, _width, _count){
+  for (let i = 0; i < _images.length; i++) {
+    const element = _images[i];
+    element.style.transform = `translateX(${-_width * (_count)}px)`;
+  }
+}
 
 export {
-    getProducts,
-    getFeatured,
-    getUser,
-    getBanner,
     getContent,
     forward,
     backward,
